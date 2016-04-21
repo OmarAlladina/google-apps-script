@@ -1,0 +1,34 @@
+//created by Omar Alladina\\
+/***********
+
+1. Reads through your inbox to grab the total number of unread emails
+   1.a. displays that figure in C2
+2. Reads through your inbox starting from index 0: retrieves 10 most recent threads; finds the subject of the first message within the thread; finds the author of the first message within the thread
+   2.a. displays data starting in the 3rd row and 6th column (subject); 3rd row and 7th column (author)
+
+************/
+
+function emailDashboard() {
+  
+  var unreadEmails = GmailApp.getInboxUnreadCount();
+    SpreadsheetApp.getActiveSheet().getRange("C2").setValue(unreadEmails);
+  
+  var first_ten_emails = GmailApp.getInboxThreads(0, 10);
+  var email_subjects = [];
+  var email_messages = [];
+  var email_senders = "";
+  var email_senders_output = [];
+  
+  for (var x = 0; x < first_ten_emails.length; x++) {
+    
+      email_subjects.push(first_ten_emails[x].getFirstMessageSubject().split());
+       SpreadsheetApp.getActiveSheet().getRange(3, 6, email_subjects.length, 1).setValues(email_subjects);
+  
+      email_messages.push(first_ten_emails[x].getMessages());  
+       email_senders = (email_messages[x][0].getFrom());
+        email_senders_output.push(email_senders.split());
+          SpreadsheetApp.getActiveSheet().getRange(3, 7, email_senders_output.length, 1).setValues(email_senders_output)
+      }
+ 
+ }
+
