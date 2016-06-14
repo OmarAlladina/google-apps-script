@@ -1,162 +1,87 @@
-function repsplit() {
+//created by Omar Alladina\\
+/*
+*****STEPS*******
+1. Log into Magento
+2. Navigate to sales_order_items
+3. Choose the appropriate date - typically previous day
+4. Export as CSV
+5. Upload to OWS folder
+6. Open in Sheets
+7. Copy Spreadsheet Link
+8. Paste Link to csv_rows (row18), csv_ss (row32)
+9. Save
+10. Press Play for each function starting from the top
+*/
+
+//this function will insert the accurate number of rows on the LTL file based on the row count found in the newest CSV file
+function insertRows() {
+
+ var csv_rows = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1y8Q7mRNedNZ0Pos7H-lnGFGITW8s_-AhIJXhEFI0jcs/edit#gid=553935519").getActiveSheet().getLastRow()-1;  
+ var ltl_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1RQ4b4Rv4bJiYuHXP6u2uOUXBR3i2OIYlZlZ_wwGDD0I/edit#gid=1562550719");
+ var magSheet = ltl_ss.getSheetByName("Magento Export");
+ var catForm = magSheet.getRange("G2").getFormula();
+ var ltlForm = magSheet.getRange("L2").getFormula();
  
-  SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1RQ4b4Rv4bJiYuHXP6u2uOUXBR3i2OIYlZlZ_wwGDD0I/edit#gid=1822529590")
-  var name1 = "Josh Haskins"
-  var name2 = "Joe Assencoa"
-  var name3 = "Tim Donegan"
-  var name4 = "Cory Procter"
-  var name5 = "Steve Wyland"
-  var name6 = "Tara Guidry"
-  var name7 = "Vince Pavone"
-  var name8 = "Baker Leavitt"
-  var name9 = "Matt White"
-  
-  var mag1 = SpreadsheetApp.getActiveSpreadsheet();
-  var magtitle = mag1.getSheetByName("Magento Export").getRange("A1:Q1").getValues();
-  
- 
-  
-  
-  
-  var newsheet1 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name1);
-  newsheet1.getRange("e4:u4").setValues(magtitle);
-  newsheet1.getRange("a1").setValue(name1).setBackground("black");
-  newsheet1.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet1.getRange("b2").setValue("LTL");
-  newsheet1.getRange("c2").setValue("Parcel");  
-  newsheet1.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet1.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet1.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet1.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet1, 5, 21, 1, 2000);
-  
- 
-                                      
-                                      
- var newsheet2 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name2);
- newsheet2.getRange("e4:u4").setValues(magtitle);
- newsheet2.getRange("a1").setValue(name2).setBackground("black");
- newsheet2.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
- newsheet2.getRange("b2").setValue("LTL");
- newsheet2.getRange("c2").setValue("Parcel");  
- newsheet2.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
- newsheet2.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
- newsheet2.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
- newsheet2.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet2, 5, 21, 1, 2000);
- 
-  var newsheet3 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name3);
-  newsheet3.getRange("e4:u4").setValues(magtitle);
-  newsheet3.getRange("a1").setValue(name3).setBackground("black");
-  newsheet3.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet3.getRange("b2").setValue("LTL");
-  newsheet3.getRange("c2").setValue("Parcel");  
-  newsheet3.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet3.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet3.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet3.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet3, 5, 21, 1, 2000);
- 
-  var newsheet4 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name4);
-  newsheet4.getRange("e4:u4").setValues(magtitle);
- newsheet4.getRange("a1").setValue(name4).setBackground("black");
-  newsheet4.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet4.getRange("b2").setValue("LTL");
-  newsheet4.getRange("c2").setValue("Parcel");  
-  newsheet4.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet4.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet4.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet4.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet4, 5, 21, 1, 2000);
- 
-  var newsheet5 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name5);
-  newsheet5.getRange("e4:u4").setValues(magtitle);
- newsheet5.getRange("a1").setValue(name5).setBackground("black");
-  newsheet5.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet5.getRange("b2").setValue("LTL");
-  newsheet5.getRange("c2").setValue("Parcel");  
-  newsheet5.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet5.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet5.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet5.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet5, 5, 21, 1, 2000);
- 
-  var newsheet6 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name6);
-  newsheet6.getRange("e4:u4").setValues(magtitle);
- newsheet6.getRange("a1").setValue(name6).setBackground("black");
-  newsheet6.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet6.getRange("b2").setValue("LTL");
-  newsheet6.getRange("c2").setValue("Parcel");  
-  newsheet6.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet6.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet6.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet6.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet6, 5, 21, 1, 2000);
- 
-  var newsheet7 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name7);
-  newsheet7.getRange("e4:u4").setValues(magtitle);
- newsheet7.getRange("a1").setValue(name7).setBackground("black");
-  newsheet7.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet7.getRange("b2").setValue("LTL");
-  newsheet7.getRange("c2").setValue("Parcel");  
-  newsheet7.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet7.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet7.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet7.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet7, 5, 21, 1, 2000);
- 
-  var newsheet8 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name8);
-  newsheet8.getRange("e4:u4").setValues(magtitle);
- newsheet8.getRange("a1").setValue(name8).setBackground("black");
-  newsheet8.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet8.getRange("b2").setValue("LTL");
-  newsheet8.getRange("c2").setValue("Parcel");  
-  newsheet8.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet8.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet8.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet8.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet8, 5, 21, 1, 2000);
- 
-  var newsheet9 = SpreadsheetApp.getActiveSpreadsheet().insertSheet(name9);
-  newsheet9.getRange("e4:u4").setValues(magtitle);
- newsheet9.getRange("a1").setValue(name9).setBackground("black");
-  newsheet9.getRange("E5").setFormula("=filter('Magento Export'!A2:Q1715,'Magento Export'!a2:A1715=a1)");
-  newsheet9.getRange("b2").setValue("LTL");
-  newsheet9.getRange("c2").setValue("Parcel");  
-  newsheet9.getRange("B3").setFormula("=sumif($p$2:$p,$b$2,$s$2:$s)").setNumberFormat("$0");
-  newsheet9.getRange("C3").setFormula("=sumif($p$2:$p,$c$2,$s$2:$s)").setNumberFormat("$0");                                    
-  newsheet9.getRange("B4").setFormula("=sumif($p$2:$p,$b$2,$o$2:$o)").setNumberFormat("0");
-  newsheet9.getRange("C4").setFormula("=sumif($p$2:$p,$c$2,$o$2:$o)").setNumberFormat("0");
-  SpreadsheetApp.getActiveSheet().getRange("A3").setValue("Total $");
-  SpreadsheetApp.getActiveSheet().getRange("A4").setValue("Total Quantity");
-  SpreadsheetApp.getActiveSheet().getRange("A1:D5").setHorizontalAlignment("Center");
-  SpreadsheetApp.getActiveSheet().getRange("E:U").copyValuesToRange(newsheet9, 5, 21, 1, 2000);
-  
-//
-//  
-//  
+     magSheet.insertRowsBefore(2, csv_rows);
+     magSheet.getRange("G2").setFormula(catForm);
+     magSheet.getRange("L2").setFormula(ltlForm); 
 }
+
+//this function will copy the data from the CSV file in chunks and then paste them in chunks to the Magento Export tab on the LTL file
+function copyPaste (){
+
+ var csv_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1y8Q7mRNedNZ0Pos7H-lnGFGITW8s_-AhIJXhEFI0jcs/edit#gid=553935519");
+ var copySheet = csv_ss.getActiveSheet().setName("Copy");
+ var sheetName = copySheet.getName();
+ var ltl_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1RQ4b4Rv4bJiYuHXP6u2uOUXBR3i2OIYlZlZ_wwGDD0I/edit#gid=1562550719");
+ var ltl_magSheet = ltl_ss.getSheetByName("Magento Export");
+ var rows = csv_ss.getActiveSheet().getLastRow()-1;
+ var csv_columns = [[1,6],[7,4],[11,5]];
+ var newColumns = [[1,6],[8,4],[13,5]];
+ var cat_form = ltl_magSheet.getRange("G2").getFormula();
+ var ltl_form = ltl_magSheet.getRange("L2").getFormula();
+ 
+
+ //copy first 6 columns; paste to column 1 row 2;
+    var dataSet1 = csv_ss.getSheetByName(sheetName).getRange(2, csv_columns[0][0], rows, csv_columns[0][1]).getValues();
+    ltl_magSheet.getRange(2, newColumns[0][0], rows, newColumns[0][1]).setValues(dataSet1);
+ //copy from column 7 row 2; paste to column 8 row 2;
+    var dataSet2 = csv_ss.getSheetByName(sheetName).getRange(2, csv_columns[1][0], rows, csv_columns[1][1]).getValues();
+    ltl_magSheet.getRange(2, newColumns[1][0], rows, newColumns[1][1]).setValues(dataSet2);
+ //columns third copy = 5; paste to column 13 row 2;
+    var dataSet3 = csv_ss.getSheetByName(sheetName).getRange(2, csv_columns[2][0], rows, csv_columns[2][1]).getValues();
+    ltl_magSheet.getRange(2, newColumns[2][0], rows, newColumns[2][1]).setValues(dataSet3);
+
+
+    ltl_magSheet.getRange(2, 7, rows, 1).setFormula(cat_form);
+    ltl_magSheet.getRange(2, 12, rows, 1).setFormula(ltl_form);
+
+
+}
+
+//this function will copy the sales data pasted from function copyPaste, iterate through each rep tab and paste the new values 
+function ltlParcUpdate() {
+  
+var ltl_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1RQ4b4Rv4bJiYuHXP6u2uOUXBR3i2OIYlZlZ_wwGDD0I/edit#gid=1822529590");  
+var repNames = ["Josh Haskins","Joe Assencoa","Tim Donegan","Cory Procter","Steve Wyland","Tara Guidry","Vince Pavone","Baker Leavitt","Matt White"];
+
+var magTitle = ltl_ss.getSheetByName("Magento Export").getRange("A1:Q1").getValues();  
+    
+    for (var x = 0; x < repNames.length; x++) {
+  
+  var   repSheet = ltl_ss.getSheetByName(repNames[x]);  
+  
+   repSheet.getRange("E:U").clear();
+   repSheet.getRange("E5").setFormula("=filter('Magento Export'!A2:Q3237,'Magento Export'!a2:A3237=a1)");
+   repSheet.getRange("E:U").copyValuesToRange(repSheet, 5, 21, 1, 6000);
+   repSheet.getRange("e4:u4").setValues(magTitle);
+    
+    }  
+   
+  
+
+   
+
+}
+
+
