@@ -3,7 +3,7 @@
 *****STEPS*******
 1. Log into Magento
 2. Navigate to sales_order_items
-3. Choose the appropriate date - typically previous day
+3. Choose the appropriate date - typically previous day - changer the dealer filter to "All Sales Reps"
 4. Export as CSV
 5. Upload to OWS folder
 6. Open in Sheets
@@ -14,9 +14,23 @@
 */
 
 //this function will insert the accurate number of rows on the LTL file based on the row count found in the newest CSV file
+
+function csvMenu () {
+
+var ui = SpreadsheetApp.getUi();
+ui.createMenu("Quota Update").addItem("Insert rows", "insertRows").addSeparator().addItem("Copy and paste", "copyPaste").addSeparator().addItem("Copy to rep sheets", "ltlParcUpdate").addToUi();
+
+}
+
 function insertRows() {
 
- var csv_rows = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1y8Q7mRNedNZ0Pos7H-lnGFGITW8s_-AhIJXhEFI0jcs/edit#gid=553935519").getActiveSheet().getLastRow()-1;  
+var ui = SpreadsheetApp.getUi();
+var url_prompt = ui.prompt('Please enter the URL for the recent Magento Export - make sure to put the URL in double quotes "www.google.com"', ui.ButtonSet.OK);
+var url_response = url_prompt.getResponseText();
+
+
+
+ var csv_rows = SpreadsheetApp.openByUrl(url_response).getActiveSheet().getLastRow()-1;  
  var ltl_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1RQ4b4Rv4bJiYuHXP6u2uOUXBR3i2OIYlZlZ_wwGDD0I/edit#gid=1562550719");
  var magSheet = ltl_ss.getSheetByName("Magento Export");
  var catForm = magSheet.getRange("G2").getFormula();
@@ -25,17 +39,24 @@ function insertRows() {
      magSheet.insertRowsBefore(2, csv_rows);
      magSheet.getRange("G2").setFormula(catForm);
      magSheet.getRange("L2").setFormula(ltlForm); 
+     
 }
 
 //this function will copy the data from the CSV file in chunks and then paste them in chunks to the Magento Export tab on the LTL file
 function copyPaste (){
 
- var csv_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1y8Q7mRNedNZ0Pos7H-lnGFGITW8s_-AhIJXhEFI0jcs/edit#gid=553935519");
+var ui = SpreadsheetApp.getUi();
+var url_prompt = ui.prompt('Please enter the URL for the recent Magento Export - make sure to put the URL in double quotes "www.google.com"', ui.ButtonSet.OK);
+var url_response = url_prompt.getResponseText();
+
+
+ var csv_ss = SpreadsheetApp.openByUrl(url_response);
  var copySheet = csv_ss.getActiveSheet().setName("Copy");
  var sheetName = copySheet.getName();
  var ltl_ss = SpreadsheetApp.openByUrl("https://docs.google.com/spreadsheets/d/1RQ4b4Rv4bJiYuHXP6u2uOUXBR3i2OIYlZlZ_wwGDD0I/edit#gid=1562550719");
  var ltl_magSheet = ltl_ss.getSheetByName("Magento Export");
  var rows = csv_ss.getActiveSheet().getLastRow()-1;
+ var mag_rows = ltl_ss.getSheetByName("Magento Export").getLastRow()-1;
  var csv_columns = [[1,6],[7,4],[11,5]];
  var newColumns = [[1,6],[8,4],[13,5]];
  var cat_form = ltl_magSheet.getRange("G2").getFormula();
@@ -53,8 +74,8 @@ function copyPaste (){
     ltl_magSheet.getRange(2, newColumns[2][0], rows, newColumns[2][1]).setValues(dataSet3);
 
 
-    ltl_magSheet.getRange(2, 7, rows, 1).setFormula(cat_form);
-    ltl_magSheet.getRange(2, 12, rows, 1).setFormula(ltl_form);
+    ltl_magSheet.getRange(2, 7, mag_rows, 1).setFormula(cat_form);
+    ltl_magSheet.getRange(2, 12, mag_rows, 1).setFormula(ltl_form);
 
 
 }
@@ -72,7 +93,7 @@ var magTitle = ltl_ss.getSheetByName("Magento Export").getRange("A1:Q1").getValu
   var   repSheet = ltl_ss.getSheetByName(repNames[x]);  
   
    repSheet.getRange("E:U").clear();
-   repSheet.getRange("E5").setFormula("=filter('Magento Export'!A2:Q3237,'Magento Export'!a2:A3237=a1)");
+   repSheet.getRange("E5").setFormula("=filter('Magento Export'!A2:Q6000,'Magento Export'!a2:A6000=a1)");
    repSheet.getRange("E:U").copyValuesToRange(repSheet, 5, 21, 1, 6000);
    repSheet.getRange("e4:u4").setValues(magTitle);
     
@@ -83,5 +104,4 @@ var magTitle = ltl_ss.getSheetByName("Magento Export").getRange("A1:Q1").getValu
    
 
 }
-
 
