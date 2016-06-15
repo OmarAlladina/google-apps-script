@@ -1,30 +1,40 @@
-function sendEmail() {
-
+//Global Variables
 var mainSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Charts & Daily Summary");
+var secondSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Data Summary");
+var magSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1");
 var fileLink = SpreadsheetApp.getActiveSpreadsheet().getUrl();
+
 var kc_range = mainSheet.getRange("L2:N7");
 var fit_range = mainSheet.getRange("L2:N7");
 var web_range = mainSheet.getRange("L2:N7");
 var ret_range = mainSheet.getRange("L2:N7");
-var kc_chart = mainSheet.getCharts()[3].getAs(MimeType.PNG);
-var fit_chart = mainSheet.getCharts()[2].getAs(MimeType.PNG);
-var website_chart = mainSheet.getCharts()[0].getAs(MimeType.PNG);
-var ret_chart = mainSheet.getCharts()[1].getAs(MimeType.PNG);
 
+var kc_chart= mainSheet.getCharts()[3];
+var fit_chart = mainSheet.getCharts()[2];
+var website_chart = mainSheet.getCharts()[0];
+var ret_chart = mainSheet.getCharts()[1];
 
+var date_formula = magSheet.getRange("I2").getFormula();
+var formula_row_count = magSheet.getLastRow()-1;
+var chartRanges = mainSheet.getCharts()[3].getRanges();
+var chart_row_count = secondSheet.getLastRow()-1;
 
+function sendEmail() {
 
-GmailApp.sendEmail("exec@killcliff.com", "Daily Sales Digest", "", {
-from: "omar@killcliff.com",
-name: "Kill Cliff Insights",
-htmlBody: 'I am a bot, please excuse any formatting issues. If you have a question or need assistance, please contact my owner. <br> Below are snapshots of our performance over the specified time period. If you would like to view the spreadsheet behind these images, please visit: ' + fileLink + '.<br/><img src="cid:kcImage"><br/><img src="cid:fitImage">,<br/><img src="cid:webImage"><br/><img src="cid:retImage">',
-inlineImages: {
-  kcImage: kc_chart,
-  fitImage: fit_chart, 
-  webImage: website_chart,
-  retImage: ret_chart }
-  
+  var kc_chart_img = mainSheet.getCharts()[3].getAs(MimeType.PNG);
+  var fit_chart_img = mainSheet.getCharts()[2].getAs(MimeType.PNG);
+  var website_chart_img = mainSheet.getCharts()[0].getAs(MimeType.PNG);
+  var ret_chart_img = mainSheet.getCharts()[1].getAs(MimeType.PNG);
 
+  GmailApp.sendEmail("exec@killcliff.com", "Daily Sales Digest", "", {
+  from: "omar@killcliff.com",
+  name: "Kill Cliff Insights",
+  htmlBody: 'I am a bot, please excuse any formatting issues. If you have a question or need assistance, please contact my owner. <br> Below are snapshots of our performance over the specified time period. If you would like to view the spreadsheet behind these images, please visit: ' + fileLink + '.<br/><img src="cid:kcImage"><br/><img src="cid:fitImage">,<br/><img src="cid:webImage"><br/><img src="cid:retImage">',
+  inlineImages: {
+    kcImage: kc_chart_img,
+    fitImage: fit_chart_img, 
+    webImage: website_chart_img,
+    retImage: ret_chart_img }
 });
 
   
@@ -32,13 +42,14 @@ inlineImages: {
 
 function formulaUpdate() {
 
-var mag_sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1");
-var date_formula = mag_sheet.getRange("I2").getFormula();
-var rowCount = mag_sheet.getLastRow()-1;
-var date_formula_newRows = mag_sheet.getRange(2, 9, rowCount).setFormula(date_formula);
+  mag_sheet.getRange(2, 9, formula_row_count).setFormula(date_formula);
 
+}
 
+function chartUpdate() {
 
+kc_chart.modify().removeRange(chartRanges[1]).addRange(secondSheet.getRange(2, 2, chart_row_count)).build();
+mainSheet.updateChart(kc_chart);
 
 
 }
