@@ -17,7 +17,7 @@ var ret_chart = mainSheet.getCharts()[1];
 var date_formula = magSheet.getRange("I2").getFormula();
 var formula_row_count = magSheet.getLastRow()-1;
 var chartRanges = mainSheet.getCharts()[3].getRanges();
-var chart_row_count = secondSheet.getLastRow()-1;
+var chart_row_count = secondSheet.getLastRow();
 
 function sendEmail() {
 
@@ -42,8 +42,14 @@ function sendEmail() {
 
 function formulaUpdate() {
 
-  mag_sheet.getRange(2, 9, formula_row_count).setFormula(date_formula);
+  magSheet.getRange(2, 9, formula_row_count).setFormula(date_formula);
 
+}
+
+function newRow () {
+
+var new_row_formula = secondSheet.getRange(chart_row_count, 1, 1,6).copyTo(secondSheet.getRange(chart_row_count+1, 1));
+ 
 }
 
 function chartUpdate() {
