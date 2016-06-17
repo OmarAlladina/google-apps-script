@@ -4,10 +4,12 @@ var secondSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Data Sum
 var magSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1");
 var fileLink = SpreadsheetApp.getActiveSpreadsheet().getUrl();
 
+/* Will be used for additional HTML Tables
 var kc_range = mainSheet.getRange("L2:N7");
 var fit_range = mainSheet.getRange("L2:N7");
 var web_range = mainSheet.getRange("L2:N7");
 var ret_range = mainSheet.getRange("L2:N7");
+*/
 
 var kc_chart= mainSheet.getCharts()[3];
 var fit_chart = mainSheet.getCharts()[2];
@@ -29,7 +31,7 @@ function sendEmail() {
   GmailApp.sendEmail("exec@killcliff.com", "Daily Sales Digest", "", {
   from: "omar@killcliff.com",
   name: "Kill Cliff Insights",
-  htmlBody: 'I am a bot, please excuse any formatting issues. If you have a question or need assistance, please contact my owner. <br> Below are snapshots of our performance over the specified time period. If you would like to view the spreadsheet behind these images, please visit: ' + fileLink + '.<br/><img src="cid:kcImage"><br/><img src="cid:fitImage">,<br/><img src="cid:webImage"><br/><img src="cid:retImage">',
+  htmlBody: 'Please note: Fitness and Website sales might vary slightly between 8pm and 12am due to server timezones; Retail sales are added based on emails flowing through PO@killcliff.com (will update to include unshipped items). <br/> Below are snapshots of our performance over the specified time period. If you would like to view the spreadsheet behind these images, please visit: ' + fileLink + '.<br/><img src="cid:kcImage"><br/><img src="cid:fitImage">,<br/><img src="cid:webImage"><br/><img src="cid:retImage">',
   inlineImages: {
     kcImage: kc_chart_img,
     fitImage: fit_chart_img, 
@@ -49,13 +51,7 @@ function formulaUpdate() {
 function newRow () {
 
 var new_row_formula = secondSheet.getRange(chart_row_count, 1, 1,6).copyTo(secondSheet.getRange(chart_row_count+1, 1));
- 
-}
-
-function chartUpdate() {
-
-kc_chart.modify().removeRange(chartRanges[1]).addRange(secondSheet.getRange(2, 2, chart_row_count)).build();
-mainSheet.updateChart(kc_chart);
-
+secondSheet.getRange(chart_row_count, 5).setValue(0); 
 
 }
+
