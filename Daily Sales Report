@@ -3,6 +3,7 @@ var mainSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Charts & D
 var secondSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Data Summary");
 var magSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Sheet1");
 var fileLink = SpreadsheetApp.getActiveSpreadsheet().getUrl();
+var retailSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Retail Sales");
 
 /* Will be used for additional HTML Tables
 var kc_range = mainSheet.getRange("L2:N7");
@@ -20,6 +21,7 @@ var date_formula = magSheet.getRange("I2").getFormula();
 var formula_row_count = magSheet.getLastRow()-1;
 var chartRanges = mainSheet.getCharts()[3].getRanges();
 var chart_row_count = secondSheet.getLastRow();
+var retail_row = retailSheet.getLastRow();
 
 function sendEmail() {
 
@@ -54,4 +56,39 @@ var new_row_formula = secondSheet.getRange(chart_row_count, 1, 1,6).copyTo(secon
 secondSheet.getRange(chart_row_count, 5).setValue(0); 
 
 }
+
+function retailSales () {
+
+//search gmail for messages from grace
+var mailSearch = GmailApp.search('from:"grace@killcliff.com" to: "purchaseorders@killcliff.com" +Total order value');
+var mailMessage = mailSearch[0].getMessages()[0];
+var mailBody = mailMessage.getPlainBody();
+var mailDate = mailMessage.getDate();
+var mailId = mailMessage.getId();
+//find 'Total order value: $xxx.xx'
+var $sign = mailBody.indexOf("$");
+var period = mailBody.indexOf(".");
+var arr = [];
+//extract $xxx.xx
+var total = mailBody.substr($sign + 1, (period - $sign) + 2);
+
+if (mailId != retailSheet.getRange(retail_row, 4).getValue()) {
+
+total.trim();
+retailSheet.getRange(retail_row + 1, 1).setValue(mailDate);
+//add to sheet
+retailSheet.getRange(retail_row + 1, 2).setValue(total);
+//update formula
+retailSheet.getRange(retail_row, 3).copyTo(retailSheet.getRange(retail_row + 1, 3));
+retailSheet.getRange(retail_row + 1, 4).setValue(mailId);
+
+} 
+
+}
+
+
+
+
+
+
 
