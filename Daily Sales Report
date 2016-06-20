@@ -59,8 +59,8 @@ secondSheet.getRange(chart_row_count, 5).setValue(0);
 
 function retailSales () {
 
-//search gmail for messages from grace
-var mailSearch = GmailApp.search('from:"grace@killcliff.com" to: "purchaseorders@killcliff.com" +Total order value');
+//search gmail for messages from anyone to purchaseorders@killcliff.com
+var mailSearch = GmailApp.search('to: "purchaseorders@killcliff.com" +Total order value');
 var mailMessage = mailSearch[0].getMessages()[0];
 var mailBody = mailMessage.getPlainBody();
 var mailDate = mailMessage.getDate();
@@ -71,7 +71,7 @@ var period = mailBody.indexOf(".");
 var arr = [];
 //extract $xxx.xx
 var total = mailBody.substr($sign + 1, (period - $sign) + 2);
-
+//logical checking if the most recent email in the inbox matches the value in the spreadsheet. If it does, the function stops.
 if (mailId != retailSheet.getRange(retail_row, 4).getValue()) {
 
 total.trim();
